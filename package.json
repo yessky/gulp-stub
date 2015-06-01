@@ -1,0 +1,21 @@
+{
+  "name": "gulp-spa-stub",
+  "version": "1.0.0",
+  "devDependencies": {
+    "browser-sync": "^2.7.6",
+    "gulp": "^3.8.11",
+    "gulp-cheerio": "^0.6.2",
+    "gulp-clean": "^0.3.1",
+    "gulp-coffee": "^2.3.1",
+    "gulp-concat": "^2.5.2",
+    "gulp-copy": "0.0.2",
+    "gulp-inject": "^1.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.0.1",
+    "gulp-sequence": "^0.3.2",
+    "gulp-svgmin": "^1.1.2",
+    "gulp-svgsprite": "^1.0.0",
+    "gulp-util": "^3.0.4",
+    "through2": "^0.6.5"
+  }
+}
