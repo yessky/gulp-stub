@@ -1,0 +1,207 @@
+@import "define";
+
+// ====================================================
+// reset default styles
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+
+html {
+  line-height: 1;
+}
+
+
+ol, ul {
+  list-style: none;
+}
+
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+
+q, blockquote {
+  quotes: none;
+}
+
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+
+a img {
+  border: none;
+}
+
+
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+  display: block;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;  
+  -webkit-appearance: none;
+  @include box-sizing(border-box);
+}
+
+html, body {
+  background: #f3f3f3;
+  height: 100%;
+  overflow: hidden;
+  font-family: "Microsoft Yahei", sans-serif;
+}
+
+body {
+  background: #f3f3f3;
+  @include font-size(24);
+}
+
+a {
+  text-decoration: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  &:active, &:focus, &:hover {
+    text-decoration: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+::-webkit-input-placeholder { 
+  color: $tipColor;
+  @include font-size(24);
+  letter-spacing: normal;
+  font-weight: normal;
+}
+
+
+// ====================================================
+// layout classes
+
+// grid system
+.row {
+  width: 100%;
+  clear: both;
+  .col-3 {
+    width: 25%;
+  }
+  .col-4 {
+    width: 33.33333333%;
+  }
+  .col-6 {
+    width: 50%;
+  }
+  .col-8 {
+    width: 66.66666666%;
+  }
+  [class^="col-"] {
+    float: left;
+  }
+  .col-left {
+    float: left;
+  }
+  .col-right {
+    float: right;
+  }
+}
+.row:before, .row:after {
+  content: " ";
+  display: table;
+}
+.row:after {
+  clear: both;
+}
+
+// alignments
+.row-center {
+  text-align: center;
+}
+.row-left {
+  text-align: left;
+}
+.row-right {
+  text-align: right;
+}
+
+
+// ====================================================
+// common widget classes
+
+// checkbox
+.ui-checkbox {
+  width: pxToRem(30px);
+  height: pxToRem(30px);
+  position: relative;
+  font-size: 0;
+  white-space: nowrap;
+  background: #f3f3f3;
+}
+.ui-checkbox label {
+  width: pxToRem(30px);
+  height: pxToRem(30px);
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 2px solid #aaa;
+}
+.ui-checkbox label:after {
+  content: '';
+  width: pxToRem(18px);
+  height: pxToRem(8px);
+  position: absolute;
+  top: pxToRem(6px);
+  left: pxToRem(4px);
+  border: 2px solid $titleColor;
+  border-top: none;
+  border-right: none;
+  border-radius: 1px;
+  background: transparent;
+  opacity: 0;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+.ui-checkbox input {
+  visibility: hidden;
+  padding: 0;
+  height: auto;
+  border: none;
+}
+.ui-checkbox input:checked + label:after {
+  opacity: 1;
+}
