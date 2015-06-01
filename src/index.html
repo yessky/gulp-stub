@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta content="yes" name="apple-mobile-web-app-capable">
+	<meta content="yes" name="apple-touch-fullscreen">
+	<meta content="telephone=no,email=no" name="format-detection">
+	<meta content="fullscreen=yes,preventMove=no" name="ML-Config">
+	<title>江苏银行</title>
+	<script>
+		// flexible.js
+		!function(){var a='@charset "utf-8"; html{overflow-y:scroll}html,body{font-family:sans-serif}html{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}html *{outline:0;-webkit-text-size-adjust:none;-webkit-tap-highlight-color:rgba(0,0,0,0)}';document.write('<style>'+a+'</style>')}();!function(a){function b(){var b=g.getBoundingClientRect().width;b/c>540&&(b=540*c),a.rem=b/16,g.style.fontSize=a.rem+"px"}var c,d,e,f=a.document,g=f.documentElement,h=f.querySelector('meta[name="viewport"]'),i=f.querySelector('meta[name="flexible"]'),wx=/MicroMessenger/i.test(navigator.userAgent),uc=/UCBrowser/i.test(navigator.userAgent),mq=/MQQBrowser/i.test(navigator.userAgent),hw=/HuaweiG520/i.test(navigator.userAgent);if(h){console.warn("将根据已有的meta标签来设置缩放比例");var j=h.getAttribute("content").match(/initial\-scale=(["']?)([\d\.]+)\1?/);j&&(d=parseFloat(j[2]),c=parseInt(1/d))}else if(i){var j=i.getAttribute("content").match(/initial\-dpr=(["']?)([\d\.]+)\1?/);j&&(c=parseFloat(j[2]),d=parseFloat((1/c).toFixed(2)))}if(!c&&!d){var k=(a.navigator.appVersion.match(/android/gi),a.navigator.appVersion.match(/iphone/gi)),c=a.devicePixelRatio;c=k?c>=3?3:c>=2?2:2:2,d=1/c}g.setAttribute("data-dpr",c);h='<meta name="viewport" content="initial-scale='+d+', maximum-scale='+d+', minimum-scale='+d+', user-scalable=no';if(!(wx||uc||mq))h+=', target-densitydpi='+(hw?'device-dpi':'320');h+='">';document.write(h);a.dpr=c,a.addEventListener("resize",function(){clearTimeout(e),e=setTimeout(b,300)},!1),a.addEventListener("pageshow",function(a){a.persisted&&(clearTimeout(e),e=setTimeout(b,300))},!1),"complete"===f.readyState?f.body.style.fontSize=12*c+"px":f.addEventListener("DOMContentLoaded",function(){f.body.style.fontSize=12*c+"px"},!1),b()}(window);
+		document.addEventListener('touchmove',function(e){e.preventDefault();},false);
+		!function(){if(/MicroMessenger/i.test(navigator.userAgent)){document.write('<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"><\/script>');}}();
+	</script>
+	<!-- @@MAINTAIN@@ -->
+	<!-- @@MODULUS@@ -->
+</head>
+<body>
+	<p style="display: none"><!-- @@SPRITE@@ --></p>
+	<link rel="stylesheet" type="text/css" href="assets/css/app.css">
+	<div id="app-view" class="app-view" tabindex="-1"></div>
+	<script src="assets/js/lib.js"></script>
+	<script src="assets/js/app.js"></script>
+</body>
+</html>

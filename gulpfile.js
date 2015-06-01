@@ -4,9 +4,9 @@ var gulp = require("gulp")
 	, clean = require("gulp-clean")
 	, concat = require("gulp-concat")
 	, sass = require("gulp-sass")
-	, coffee = require("gulp-coffee")
 	, inject = require("gulp-inject")
 	, rename = require("gulp-rename")
+	, uglify = require("gulp-uglify")
 
 	, browserSync = require("browser-sync").create()
 	, reload = browserSync.reload
@@ -18,16 +18,16 @@ var gulp = require("gulp")
 	, through2 = require("through2");
 
 // # app configs
-var src = "./src/"
-	, dev = "./dev/"
-	, dist = "./dist/";
+var src = "src/"
+	, dev = "dev/"
+	, dist = "dist/";
 
 var config = {
-	modulus: 'a9124e2398d62969c87762c1e65a0a6b9e8bce665a3dc7ac19413b2281b40f56910e61abc34dabd80adf24f5621ffbc4fb0a405291874cc82a3235e5de05f08d376bd8ec2e338252afc033e410651378860df0d07eb8ba54d1b99318698c8355170264dfe9851fb27b676f12d2c5679376a5f5cd84b8bb4b401763855802d999'
+	modulus: 'modulus'
 	, local: {
-		server: 'http://192.168.10.43:9001/'
-		, appid: 'wx656917744e1c23d9'
-		, authurl: 'http://redpacket-dev.quanyibao.com/brige.html'
+		server: 'http://localhost:3000/'
+		, appid: 'wx616917744e1c23d9'
+		, authurl: 'http://localhost:3000/wechat'
 	}
 };
 
@@ -50,40 +50,31 @@ gulp.task("sass",function() {
 
 
 // # concat and copy js libraries
-gulp.task("libs", function() {
+gulp.task("concat:lib", function() {
 	return gulp.src([
 			src + "js/lib/underscore.js"
 			, src + "js/lib/zepto.js"
 			, src + "js/lib/backbone.js"
-			, src + "js/lib/Deferred.js"
 			, src + "js/lib/iscroll-probe.js"
-			, src + "js/lib/snap.svg.js"
-			, src + "js/lib/crypto.js"
+			, src + "js/core/engine.js"
+			, src + "js/core/declare.js"
+			, src + "js/core/State.js"
+			, src + "js/core/Deferred.js"
+			, src + "js/core/aspect.js"
+			, src + "js/core/Widget.js"
+			, src + "js/core/Template.js"
+			, src + "js/plugin/*.js"
 		])
 		.pipe(concat("lib.js"))
 		.pipe(gulp.dest(dev + "./assets/js/"));
 });
 
 
-// # concat and compile coffees
-gulp.task("coffee", function() {
-	return gulp.src([
-		src + "js/intro.coffee"
-		, src + "js/util.coffee"
-		, src + "js/calculator.coffee"
-		, src + "js/formats.coffee"
-		, src + "js/validates.coffee"
-		, src + "js/routes.coffee"
-		, src + "js/wechat.coffee"
-		, src + "js/app.coffee"
-		, src + "js/Widget.coffee"
-		, src + "js/Page.coffee"
-		, src + "js/plugins/*.coffee"
-		, src + "js/views/*.coffee"
-	])
-	.pipe(concat("app.coffee"))
-	.pipe(coffee({bare: true}).on("error", gutil.log))
-	.pipe(gulp.dest(dev + "assets/js/"));
+// # concat and copy app js
+gulp.task("concat:app", function() {
+	return gulp.src(src + "js/app/**/*.js")
+		.pipe(concat("app.js"))
+		.pipe(gulp.dest(dev + "assets/js/"));
 });
 
 
@@ -99,7 +90,7 @@ gulp.task("svgsprite", function() {
 	  	if (result) {
 	  		result += "\n";
 	  	}
-	  	result += "." + name + " { ";
+	  	result += "." + name.replace(/\./g, "-") + " { ";
 	  	for (var p in icon) {
 	  		var val = icon[p];
 	  		result += p + ": " + (isMeasurable[p] ? "pxToRem(" + val + "px)" : val) + "; ";
@@ -139,21 +130,6 @@ gulp.task("inject:sprite", function() {
 			, endtag: "@@ -->"
 			, transform: transform
 			, removeTags: true
-		}))
-		.pipe(gulp.dest(dev));
-});
-
-
-// # copy static resources
-gulp.task("copy:dev", function() {
-	return gulp.src([
-			src + "*.html"
-			, src + "images/**/*.{jpg,jpeg,png,gif}"
-		], {base: src})
-		.pipe(rename(function(path) {
-			if (path.dirname === "images") {
-				path.dirname = "assets/images";
-			}
 		}))
 		.pipe(gulp.dest(dev));
 });
@@ -217,8 +193,8 @@ gulp.task("server", function() {
 		}
 	});
 
-	gulp.watch(src + "js/lib/*.js", ["libs"]);
-	gulp.watch(src + "js/**/*.coffee", ["coffee"]);
+	gulp.watch(src + "js/{lib,core,plugin}/*.js", ["concat:lib"]);
+	gulp.watch(src + "js/app/*.js", ["concat:app"]);
 	gulp.watch([
 		src + "*.html"
 		, src + "images/*.{png,jpg,jpeg,gif}"
@@ -232,13 +208,42 @@ gulp.task("server", function() {
 });
 
 
+// # copy static resources to dev folder
+gulp.task("copy:dev", function() {
+	return gulp.src([
+			src + "*.html"
+			, src + "images/**/*.{jpg,jpeg,png,gif}"
+		], {base: src})
+		.pipe(rename(function(path) {
+			if (path.dirname === "images") {
+				path.dirname = "assets/images";
+			}
+		}))
+		.pipe(gulp.dest(dev));
+});
+
+// # copy static resources to release folder
+gulp.task("copy:dist", function() {
+	return gulp.src(dev + "**/*", {base: dev})
+		.pipe(gulp.dest(dist));
+});
+
+
+// # uglify js
+gulp.task("uglify", function() {
+	return gulp.src(dist + "assets/js/*.js", {base: dist})
+		.pipe(uglify())
+		.pipe(gulp.dest(dist));
+});
+
+
 // # basic build process depends on nothing
-gulp.task("build", sequence(["copy:dev", "svgsprite", "libs", "coffee"], ["sass", "inject:sprite"]));
+gulp.task("build", sequence(["copy:dev", "svgsprite", "concat:lib", "concat:app"], ["sass", "inject:sprite"]));
 
 // #############################################
 // # public task
 // # don't call above defined tasks directly
 
 gulp.task("default", sequence("clean:dev", "build", "inject:config@local", "server"));
-gulp.task("alpha", sequence("clean:dev", "build", "inject:config@alpha", "copy:dist"));
-gulp.task("release", sequence("clean:dev", "build", "inject:config@release", "copy:dist"));
+gulp.task("alpha", sequence("clean:dev", "build", "inject:config@alpha", "copy:dist", "uglify"));
+gulp.task("release", sequence("clean:dev", "build", "inject:config@release", "copy:dist", "uglify"));

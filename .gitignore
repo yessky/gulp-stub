@@ -1,5 +1,7 @@
 node_modules/
 .sass-cache/
+src/sass/*.svg
+src/sass/_icons*.scss
 dev/
-src/
-**/Thumbs.db
+**/*.db
+**/*.log
