@@ -63,7 +63,7 @@ gulp.task("concat:lib", function() {
 			, src + "js/core/aspect.js"
 			, src + "js/core/Widget.js"
 			, src + "js/core/Template.js"
-			, src + "js/plugin/*.js"
+			, src + "js/common/*.js"
 		])
 		.pipe(concat("lib.js"))
 		.pipe(gulp.dest(dev + "./assets/js/"));

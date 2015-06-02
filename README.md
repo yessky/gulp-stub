@@ -47,7 +47,7 @@
 	- release 构建好的线上版本(经过压缩优化，可直接复制该目录部署到服务器上)
 
 
-### 用法:
+### 如何工作:
 
 	1. 执行 npm install 安装构建工具所依赖的模块
 
@@ -57,3 +57,28 @@
 
 	3. 执行 gulp release 构建线上正式环境版本
 
+### 如何实现一个页面
+
+下面以实现登录(Login.js)页面为例
+
+1. 在src/js/app目录下新建文件Login.js
+
+2. 用一个立即执行的函数来限制作用域，页面实现的具体代码放入该函数体类
+
+'''javascript
+;!function(kjs) {
+	// 获取基类
+	var Page = kjs.getClass("ui.Page");
+
+	var LoginPage = kjs.declare("ui.Login", [Page], {
+		title: "Login",
+		templateString: "...."
+		// others
+	});
+
+}(this.kjs);
+'''
+
+3. kjs.declare声明一个类，接受三个参数(类名，[依赖的基类]，类的原型)
+
+4. kjs.getDeclare("ui.Page")接受一个参数(类名), 用来获取使用kjs.declare声明的类

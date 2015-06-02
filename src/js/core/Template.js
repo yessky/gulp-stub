@@ -36,7 +36,10 @@
 	};
 
 	var Template = declare('ui.Template', null, {
+		// is there sub widget in the template ?
 		widgetsInTemplate: 0,
+
+		templateString: "<div></div>",
 
 		constructor: function( params, srcNodeRef ) {
 			this.__points__ = [];
@@ -63,6 +66,16 @@
 				this.__fillContent( this.srcNodeRef );
 			}
 			this._rendered = true;
+		},
+
+		bind: function( node, type, selector, fn ) {
+			if (!fn) {
+				fn = selector;
+				selector = null;
+			}
+			var handle = this.__listen( node, type, selector, kjs.hitch(this, fn) );
+			this.__events__.push(handle);
+			return handle;
 		},
 
 		__fillContent: function( source ) {

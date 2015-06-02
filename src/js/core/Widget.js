@@ -4,7 +4,7 @@
 
 	var aspect = kjs.aspect;
 	var declare = kjs.declare;
-	var State = kjs.getClass("State");
+	var State = kjs.getDeclare("State");
 
 	var isEqual = function( a, b ) {
 		return a === b || a !== a && b !== b;
@@ -67,7 +67,7 @@
 			this.ownerDocument = this.ownerDocument || (this.srcNodeRef ? this.srcNodeRef.ownerDocument : document);
 			this.ownerDocumentBody = this.ownerDocument.body;
 
-			registry.add(this);
+			Widget.add(this);
 
 			this.buildRendering();
 
@@ -83,7 +83,7 @@
 					deleteSrcNodeRef = true;
 				}
 
-				this.domNode.setAttribute( 'kjsAttrName', this.id );
+				this.domNode.setAttribute( kjsAttrName, this.id );
 			}
 
 			this.postCreate();
@@ -196,7 +196,7 @@
 		destroyRendering: function( preserveDom ) {
 			if ( this.domNode ) {
 				if ( preserveDom ) {
-					this.domNode.removeAttribute( 'kjsAttrName' );
+					this.domNode.removeAttribute( kjsAttrName );
 				} else {
 					$( this.domNode ).remove();
 				}
@@ -230,7 +230,7 @@
 				if ( this.__notify__ ) {
 					this.__notify__( name, prev, value );
 				}
-				this.emit(name + ':change', {
+				this.signal(name + ':change', {
 					detail: { name: name, previous: prev, value: value }
 				});
 			}
@@ -317,7 +317,7 @@
 			return widgetCache[id];
 		},
 		byNode: function(node) {
-			return widgetCache[ node.getAttribute('kjsAttrName') ];
+			return widgetCache[ node.getAttribute(kjsAttrName) ];
 		},
 		findWidgets: function( root, skipNode ) {
 			var out = [];
@@ -325,7 +325,7 @@
 			function getChildren( root ) {
 				for ( var node = root.firstChild; node; node = node.nextSibling ) {
 					if ( node.nodeType === 1 ) {
-						var widgetId = node.getAttribute( 'kjsAttrName' );
+						var widgetId = node.getAttribute( kjsAttrName );
 						if ( widgetId ) {
 							var widget = widgetCache[ widgetId ];
 							if ( widget ) {
@@ -343,7 +343,7 @@
 		},
 		getEnclosingWidget: function( node ) {
 			while ( node ) {
-				var id = node.nodeType === 1 && node.getAttribute('kjsAttrName');
+				var id = node.nodeType === 1 && node.getAttribute(kjsAttrName);
 				if ( id ) {
 					return widgetCache[id];
 				}

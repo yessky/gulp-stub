@@ -1,0 +1,2 @@
+
+kjs.history = {isBack: false};

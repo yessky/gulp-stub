@@ -416,11 +416,11 @@
 	}
 
 	kjs.declare = declare;
-	kjs.getClass = function(className) {
+	kjs.getDeclare = function(className) {
 		return declare.declaredClass[className];
 	};
 	kjs.getInstanceOf = function(className, params, referNode) {
-		var Class = kjs.getClass(className);
+		var Class = kjs.getDeclare(className);
 		if (!Class) {
 			throw new Error(className + " is not declared!");
 		}

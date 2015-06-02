@@ -85,7 +85,7 @@
 
 	// ========================================
  	// # mount underscore/zepto/Backbone utils
- 	$.each(["each", "trim", "isArray", "isFunction", "isEmptyObject", "isPlainObject"], function(i, attr) {
+ 	$.each(["each", "trim", "isArray", "isFunction", "isEmptyObject", "isPlainObject", "fx"], function(i, attr) {
  		kjs[attr] = $[attr];
  	});
 
@@ -93,13 +93,16 @@
  	// # mount dom operations
  	var proxyNode = $("<b></b>");
  	var proxyCall = function(node) {
- 		return (proxyNode[0] = node, proxyInst);
+ 		return (proxyNode[0] = node, proxyNode);
  	};
  	kjs.addClass = function(node, className) {
  		return proxyCall(node).addClass(className);
  	};
  	kjs.removeClass = function(node, className) {
  		return proxyCall(node).removeClass(className);
+ 	};
+ 	kjs.hasClass = function(node, className) {
+ 		return proxyCall(node).hasClass(className);
  	};
  	kjs.addStyle = function(node, name, value) {
  		var zepto = proxyCall(node);
@@ -125,6 +128,9 @@
 	    return frag.childNodes[0];
 	  }
 	  return frag;
+ 	};
+ 	kjs.template = function(templateString) {
+ 		return _.template(templateString);
  	};
 
 	// ========================================
