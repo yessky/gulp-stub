@@ -63,7 +63,7 @@ gulp.task("concat:lib", function() {
 			, src + "js/core/aspect.js"
 			, src + "js/core/Widget.js"
 			, src + "js/core/Template.js"
-			, src + "js/common/*.js"
+			, src + "js/plugin/*.js"
 		])
 		.pipe(concat("lib.js"))
 		.pipe(gulp.dest(dev + "./assets/js/"));
@@ -194,7 +194,10 @@ gulp.task("server", function() {
 	});
 
 	gulp.watch(src + "js/{lib,core,plugin}/*.js", ["concat:lib"]);
-	gulp.watch(src + "js/app/*.js", ["concat:app"]);
+	gulp.watch([
+		src + "js/app/*.js"
+		, src + "js/app/vm/*.js"
+	], ["concat:app"]);
 	gulp.watch([
 		src + "*.html"
 		, src + "images/*.{png,jpg,jpeg,gif}"

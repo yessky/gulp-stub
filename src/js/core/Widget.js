@@ -136,6 +136,19 @@
 
 		postMixInProperties: function() {
 			//		used set properties that are referenced in the widget template.
+			//		by default, I make it support "baseClass" inheritance.
+			var klass = [];
+			var superclass = this.constructor.superclass;
+			if (this.constructor.prototype.hasOwnProperty("baseClass")) {
+				klass.push(this.constructor.prototype.baseClass);
+			}
+			while (superclass && superclass.declaredClass) {
+				if (superclass.baseClass) {
+					klass.unshift(superclass.baseClass);
+				}
+				superclass = superclass.constructor.superclass;
+			}
+			this.baseClass = klass.join(" ");
 		},
 
 		buildRendering: function() {

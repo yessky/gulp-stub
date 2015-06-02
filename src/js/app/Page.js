@@ -6,16 +6,20 @@
 	var Widget = kjs.getDeclare("ui.Widget");
 	var Template = kjs.getDeclare("ui.Template");
 
+	var templateString = "<div class=\"<%=baseClass%>\" id=\"<%=id%>\">\n	<header class=\"page-header\" data-kjs-node=\"pageHead\">\n		<div class=\"left\">\n			<span class=\"btn-back\" data-kjs-event=\"tap: onBack\">\n				<svg class=\"icon icon-arrow icon-back\"><use xlink:href=\"#icon-arrow\"></use></svg>\n				<span>返回</span>\n			</span>\n		</div>\n		<div class=\"center\">\n			<span class=\"title\" data-kjs-node=\"pageTitle\"><%-title%></span>\n		</div>\n	</header>\n	<div class=\"page-body<%if(scrollable){%> ui-scrollview<%}%>\" data-kjs-node=\"pageBody\">\n		<div class=\"page-content<%if(scrollable){%> ui-scrollview-inner<%}%>\" data-kjs-node=\"pageContent\">${content}</div>\n	</div>\n</div>";
+
 	var Page = declare("ui.Page", [Widget, Template], {
 		// page title
 		title: "",
 
 		_setTitleAttr: function(title) {
 			document.title = title;
-			if (this.titleNode) {
-	      this.titleNode.innerHTML = title;
+			if (this.pageTitle) {
+	      this.pageTitle.innerHTML = title;
 	    }
 		},
+
+		baseClass: "kjs-page",
 
 		// scrollView settings
 		scrollable: 1,
@@ -54,7 +58,7 @@
 			this.inherited(arguments);
 			if (this.scrollable) {
 	      this.scrollView = new kjs.ScrollView({
-	        domNode: this.contentNode,
+	        domNode: this.pageBody,
 	        pullDown: this.scrollPullDown,
 	        pullUp: this.scrollPullUp,
 	        onPullDown: kjs.hitch(this, this.onPullDown),
@@ -103,10 +107,7 @@
 		}
 	});
 
-	Page.baseClass = "app-page";
-
-	Page.templateString = "<div class=\"<%=baseClass%>\" id=\"<%=id%>\">\n	<header class=\"page-header\" data-kjs-node=\"headNode\">\n		<div class=\"left\">\n			<span class=\"btn-back\" data-kjs-event=\"tap: onBack\">\n				<svg class=\"icon icon-arrow icon-back\"><use xlink:href=\"#icon-arrow\"></use></svg>\n				<span>返回</span>\n			</span>\n		</div>\n		<div class=\"center\">\n			<span class=\"title\" data-kjs-node=\"titleNode\"><%-title%></span>\n		</div>\n	</header>\n	<div class=\"page-content<%if(scrollable){%> ui-scrollview<%}%>\" data-kjs-node=\"contentNode\">\n		<div class=\"page-body<%if(scrollable){%> ui-scrollview-inner<%}%>\" data-kjs-node=\"bodyNode\">${content}</div>\n	</div>\n</div>";
-
+	Page.templateString = templateString;
 	kjs.Page = Page;
 
 }(this.kjs);

@@ -24,7 +24,7 @@
 		for ( ; i < l; ++i ) {
 			base = bases[i];
 			if ( !base ) {
-				err('mixin #' + i + ' is unknown. Did you use require to pull it in?', className);
+				err('mixin #' + i + ' is unknown. Did you use kjs.getDeclare to pull it in?', className);
 			} else if ( type(base) !== 'function' ) {
 				err('mixin #' + i + ' is not a callable constructor.', className);
 			}
