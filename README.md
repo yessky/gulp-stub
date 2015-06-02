@@ -65,7 +65,7 @@
 
 2. 用一个立即执行的函数来限制作用域，页面实现的具体代码放入该函数体类
 
-'''javascript
+```javascript
 ;!function(kjs) {
 	// 获取基类
 	var Page = kjs.getClass("ui.Page");
@@ -77,7 +77,7 @@
 	});
 
 }(this.kjs);
-'''
+```
 
 3. kjs.declare声明一个类，接受三个参数(类名，[依赖的基类]，类的原型)
 
