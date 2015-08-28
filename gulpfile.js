@@ -4,8 +4,6 @@ var gulp = require("gulp")
 	, clean = require("gulp-clean")
 	, concat = require("gulp-concat")
 	, sass = require("gulp-sass")
-	, inject = require("gulp-inject")
-	, rename = require("gulp-rename")
 	, uglify = require("gulp-uglify")
 
 	, browserSync = require("browser-sync").create()
@@ -15,7 +13,9 @@ var gulp = require("gulp")
 	, svgsprite = require("gulp-svgsprite")
 	, svgmin = require("gulp-svgmin")
 
-	, through2 = require("through2");
+	, through2 = require("through2")
+	, path = require("path")
+	, fs = require("fs");
 
 // # app configs
 var src = "src/"
@@ -24,11 +24,6 @@ var src = "src/"
 
 var config = {
 	modulus: 'modulus'
-	, local: {
-		server: 'http://localhost:3000/'
-		, appid: 'wx616917744e1c23d9'
-		, authurl: 'http://localhost:3000/wechat'
-	}
 };
 
 // # clean
@@ -40,6 +35,51 @@ gulp.task("clean:dist", function () {
 	return gulp.src(dist).pipe(clean());
 });
 
+// # sprites
+gulp.task("sprite", function() {
+	var spriteGetter = ""
+		+ "@function sprite-icon($name, $attr) {\n"
+		+ "\t$meta: map-get($icons-sprite-map, $name);\n"
+		+ "\t@return #{map-get($meta, $attr)};\n"
+		+ "}";
+	// 自动生成sprite以及sass mixin
+	// 可以使用sprite-icon(icon-name)获取某个图标的某个状态的坐标
+	return gulp.src(src + "icons/*.png")
+		.pipe(plumber())
+		.pipe(spritesmith({
+			imgName: "icons.png"
+			, padding: 10
+			, cssName: "_icons.scss"
+			, cssTemplate: function(data) {
+				var prefix = "";
+				var icons = "";
+				var smap = "$icons-sprite-map: (";
+				data.sprites.forEach(function(icon, i) {
+					var name = icon.name.replace(/\./g, '-');
+					var px = icon.px;
+					var iconName = "icon-" + name;
+					//smap += (i ? ",\n\t" : "\n\t") + iconName + ": \"" + px.offset_x + " " + px.offset_y + "\"";
+					smap += (i ? ",\n\t" : "\n\t") + iconName + ": (left: \"" + px.offset_x + "\", top:\"" + px.offset_y + "\", width:\"" + px.width + "\", height:\"" + px.height + "\")";
+					prefix += (prefix ? ",\n" : "") + ".icon-" + name;
+					icons += (icons ? "\n" : "") + ".icon-" + name + " {\n" +
+						"  width: " + px.width + ";\n" +
+						"  height: " + px.height + ";\n" +
+						"  background-position: " + px.offset_x + " " + px.offset_y + ";\n" +
+						"}";
+				});
+				prefix += " {\n	background-image:url(/assets/images/" + data.spritesheet.escaped_image + ");\n}";
+				return smap + "\n);\n" + spriteGetter + "\n" + prefix + "\n" + icons;
+			}
+		}))
+		.pipe(rename(function(path) {
+			if (path.extname === ".scss") {
+				path.dirname = "sass";
+			} else {
+				path.dirname = "images";
+			}
+		}))
+		.pipe(gulp.dest(src));
+});
 
 // # sass
 gulp.task("sass",function() {

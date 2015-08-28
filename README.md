@@ -1,6 +1,6 @@
-# gulp-mobile-stub
+# gulp-stub
 
-移动端前端项目脚手架
+前端项目脚手架
 
 使用了gulp/sass, 在使用之前确保gulp,sass等已经安装
 
